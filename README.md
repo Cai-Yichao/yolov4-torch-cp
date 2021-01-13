@@ -68,8 +68,11 @@ loss曲线会保存至./data_gen_and_train目录下面。
 
 ## 4 评价
 评价代码在./validation下面。
+
 **Step 1** 修改脚本
+
 （1）若训练时未使用数据扩充，修改1_get_val_txt.py中第9行expanded_train.txt为init_train.txt
+
 （2）修改3_get_val_predict.py中23行一下的变量：
 ```shell
 imgs_path   # 数据集图像保存路径
@@ -100,5 +103,4 @@ confidence  # 识别输出的置信阈值
 
 ## 声明
 本项目的算法核心代码来源于 https://github.com/bubbliiiing/yolov4-pytorch
-
 我只是调整和添加了一些代码。如有不合适之处，联系我删除。
