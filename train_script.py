@@ -51,8 +51,8 @@ if __name__ == "__main__":
         freeze_epoch=50,            # 冻结权重epoch
         freeze_learning_rate=1e-3,          # 冻结时初始学习率
         bn_size=8,  
-        total_epoch=250,            # 总的训练epoch
-        learning_rate=5e-4,         # 解冻后初始学习率
+        total_epoch=300,            # 总的训练epoch
+        learning_rate=1e-4,         # 解冻后初始学习率
         cosine_lr=False,    # 是否使用余弦学习率，默认False
         mosaic=True,      # 是否使用mosaic增强，默认True
         smooth_label=0,       # 是否使用标签平滑，默认0
