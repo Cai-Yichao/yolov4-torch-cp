@@ -1,12 +1,15 @@
-# 拷贝版YOLOv4
-模型核心代码拷贝于： https://github.com/bubbliiiing/yolov4-pytorch
+# PyTorch YOLOv4
+模型核心代码拷贝于： https://github.com/bubbliiiing/yolov4-pytorch ，在此基础上增、改代码，可以训练、推理、评价。
 ____
 
 ## 1 数据准备
 
-**Step 1** 利用LabelImg标注数据
+**Step 1** 利用LabelImg标注数据， 完成标注后将数据分成训练集和测试集两部分。
 
-**Step 2** 在./input/dataset路径下新建images和labels文件夹，将图像拷贝到images目录，将相应的xml文件拷贝到labels目录。
+**Step 2** 
+
+「训练集」： 在./input/dataset 路径下新建images和labels文件夹，将训练集图像拷贝到images目录，将相应的xml文件拷贝到labels目录。
+「测试集」： 在./input/test 路径下新建images和labels文件夹，将测试集图像拷贝到images目录，将相应的xml文件拷贝到labels目录。
 
 **Step 3** 下载预训练权重（链接来自 https://github.com/bubbliiiing/yolov4-pytorch）
 
@@ -71,21 +74,17 @@ loss曲线会保存至./data_gen_and_train目录下面。
 
 **Step 1** 修改脚本
 
-（1）若训练时未使用数据扩充，修改1_get_val_txt.py中第9行expanded_train.txt为init_train.txt
-
-（2）修改3_get_val_predict.py中23行一下的变量：
+修改2_get_val_predict.py中23行以下的变量：
 ```shell
-imgs_path   # 数据集图像保存路径
 model_path  # 评价的目标权重路径
 image_size # 网络输入大小，和训练保持一致
 ```
 **Step 2** 依次运行：
 ```shell
 cd ./validation
-python 1_get_val_txt.py
-python 2_get_val_gt.py
-python 3_get_val_predict.py
-python 4_get_map.py
+python 1_get_val_gt.py
+python 2_get_val_predict.py
+python 3_get_map.py
 ```
 完毕后，在./validation/results下面会生成相应的指标可视化图像。
 
@@ -100,7 +99,3 @@ confidence  # 识别输出的置信阈值
 （3）运行predict.py
 
 执行完毕后，在./data_gen_and_train/predicts/results中会生成推理结果的可视化图像，文件名和原始图像一一对应。
-
-## 声明
-本项目的算法核心代码来源于 https://github.com/bubbliiiing/yolov4-pytorch
-我只是调整和添加了一些代码。如有不合适之处，联系我删除。

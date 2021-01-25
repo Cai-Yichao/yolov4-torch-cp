@@ -1,5 +1,5 @@
 """
-step 2:
+step 1:
 获取评价的ground truth
 """
 import sys
@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 from tqdm import tqdm
 
 classes_file = "../data_gen_and_train/param_files/classes.name"
+annotation_file = "../data_gen_and_train/param_files/test.txt"
 
 def get_class(classes_path):
     classes_path = os.path.expanduser(classes_path)
@@ -21,7 +22,7 @@ if not os.path.exists("ground-truth"):
     os.makedirs("ground-truth")
 
 cls_names = get_class(classes_file)
-with open('validation.txt', 'r') as file_r:
+with open(annotation_file, 'r') as file_r:
     lines = file_r.readlines()
     for line in tqdm(lines):
         line = line.strip('\n').split()

@@ -1,5 +1,5 @@
 """
-step 3:
+step 2:
 获取评价的检测结果
 """
 import sys
@@ -21,7 +21,7 @@ from data_gen_and_train.utils.utils import non_max_suppression, \
 from tqdm import tqdm
 
 # global values
-imgs_path = "../input/dataset/images/"
+imgs_path = "../input/test/images/"
 model_path = "../data_gen_and_train/ckpt/Epoch232-Total_Loss1.5223-Val_Loss3.6240.pth"
 cls_path = "../data_gen_and_train/param_files/classes.name"
 anchors_path = "../data_gen_and_train/param_files/yolo_anchors.txt"

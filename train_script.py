@@ -16,6 +16,16 @@ gen_label_txt(xmlfilepath, saveBasePath, anno_file)
 
 print("Finished format transformation.")
 
+# 如果准备了评价数据
+saveBasePath = r"./input/test/"
+xmlfilepath = r'./input/test/labels/'
+if os.path.exists(xmlfilepath):
+    anno_file = "./data_gen_and_train/param_files/test.txt"
+    voc2yolo(xmlfilepath, saveBasePath)
+    gen_label_txt(xmlfilepath, saveBasePath, anno_file)
+
+print("Finished format transformation.")
+
 
 """
 (2)生成数据，扩充数据集
@@ -51,8 +61,8 @@ if __name__ == "__main__":
         freeze_epoch=50,            # 冻结权重epoch
         freeze_learning_rate=1e-3,          # 冻结时初始学习率
         bn_size=8,  
-        total_epoch=300,            # 总的训练epoch
-        learning_rate=1e-4,         # 解冻后初始学习率
+        total_epoch=250,            # 总的训练epoch
+        learning_rate=5e-4,         # 解冻后初始学习率
         cosine_lr=False,    # 是否使用余弦学习率，默认False
         mosaic=True,      # 是否使用mosaic增强，默认True
         smooth_label=0,       # 是否使用标签平滑，默认0
