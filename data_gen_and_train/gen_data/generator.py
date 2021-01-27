@@ -264,7 +264,7 @@ class Generator:
                 src_name = info["path"].split('/')[-1]
                 for i, param in enumerate(param_list):
                     dst_image = hsv_tuning(src_img, param[0], param[1], param[2])  # 色域变换
-                    dst_name = "./input/helmet/xml_images/hsv_" + str("%s_" % i) + src_name
+                    dst_name = "./input/dataset/images/hsv_" + str("%s_" % i) + src_name
                     cv.imwrite(dst_name, dst_image)  # 保存图像
                     str_tmp = self.string2write(dst_name, info["jyz"], info["zb"])
                     w_f.write(str_tmp)  # 保存标签
@@ -282,7 +282,7 @@ class Generator:
                 for i in range(len(thres)):
                     dst, alpha = fancy_pca(image_arr, thres[i])
                     im = Image.fromarray(dst)
-                    dst_name = "./input/helmet/xml_images/fancyPCA_" + str("%s_" % i) + src_name
+                    dst_name = "./input/dataset/images/fancyPCA_" + str("%s_" % i) + src_name
                     print(dst_name)
                     im.save(dst_name)
                     str_tmp = self.string2write(dst_name, info["jyz"], info["zb"])
@@ -300,7 +300,7 @@ class Generator:
                 for i in range(2):
                     scale = 1 / ((i + 1) * 2)
                     dst_image = scale_transform(src_img, scale)  # 尺度变换
-                    dst_name = "./input/helmet/xml_images/scale_" + str("%s_" % i) + src_name
+                    dst_name = "./input/dataset/images/scale_" + str("%s_" % i) + src_name
                     cv.imwrite(dst_name, dst_image)  # 保存图像
                     # 修改坐标
                     jyz, zb = self.change_coordinate('scale', scale, info["jyz"], info["zb"])
@@ -320,7 +320,7 @@ class Generator:
                 beta = [30, 60, -30, -60]
                 for i in range(len(beta)):
                     dst_image = bright_transform(src_img, beta=beta[i])
-                    dst_name = "./input/helmet/xml_images/bright_" + str("%s_" % beta[i]) + src_name
+                    dst_name = "./input/dataset/images/bright_" + str("%s_" % beta[i]) + src_name
                     cv.imwrite(dst_name, dst_image)  # 保存图像
                     str_tmp = self.string2write(dst_name, info["jyz"], info["zb"])
                     w_f.write(str_tmp)  # 保存标签
@@ -337,7 +337,7 @@ class Generator:
                 beta = [-1, 0, 1]
                 for i in range(len(beta)):
                     dst_image = flip_transform(src_img, flip_param=beta[i])
-                    dst_name = "./input/helmet/xml_images/flip_" + str("%s_" % beta[i]) + src_name
+                    dst_name = "./input/dataset/images/flip_" + str("%s_" % beta[i]) + src_name
                     cv.imwrite(dst_name, dst_image)  # 保存图像
                     jyz, zb = self.change_coordinate('flip', beta[i], info["jyz"], info["zb"],
                                                      image_shape=src_img.shape[:2])
@@ -354,7 +354,7 @@ class Generator:
                 src_img = cv.imread(info["path"])
                 src_name = info["path"].split('/')[-1]
                 dst_image = rotate_transform(src_img)
-                dst_name = "./input/helmet/xml_images/rotate_90_" + src_name
+                dst_name = "./input/dataset/images/rotate_90_" + src_name
                 cv.imwrite(dst_name, dst_image)  # 保存图像
                 param = 90
                 jyz, zb = self.change_coordinate('rotate', param, info["jyz"], info["zb"],
