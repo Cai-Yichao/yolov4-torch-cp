@@ -13,7 +13,7 @@ from data_gen_and_train.nets.yolo_training import YOLOLoss, Generator
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from data_gen_and_trainutils.dataloader import yolo_dataset_collate, YoloDataset
+from data_gen_and_train.utils.dataloader import yolo_dataset_collate, YoloDataset
 
 
 # ---------------------------------------------------#
