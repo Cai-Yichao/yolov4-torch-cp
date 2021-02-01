@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 
 # 获取图像路径
-test_path = "./input/test_images/"
+test_path = "./input/test/images/"
 img_names = os.listdir(test_path)
 print(img_names)
 
