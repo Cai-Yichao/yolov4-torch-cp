@@ -98,7 +98,7 @@ yolo = mAP_Yolo(
 )
 
 img_ids = []
-with open('validation.txt', 'r') as file_r:
+with open('./input/test/trainval.txt', 'r') as file_r:
     for line in file_r.readlines():
         img_path = line.strip('\n').split(' ')[0]
         img_id = img_path.split('/')[-1].strip('.jpg')
