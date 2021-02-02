@@ -79,7 +79,7 @@ class YOLO(object):
         self.net.load_state_dict(state_dict)
 
         if self.cuda:
-            os.environ["CUDA_VISIBLE_DEVICES"] = '1'
+            # os.environ["CUDA_VISIBLE_DEVICES"] = '1'
             self.net = nn.DataParallel(self.net)
             self.net = self.net.cuda()
 
