@@ -4,6 +4,7 @@ from data_gen_and_train.yolo import YOLO
 from PIL import Image
 from tqdm import tqdm
 
+os.environ["CUDA_VISIBLE_DEVICES"] = '0'
 
 # 获取图像路径
 test_path = "./input/test/images/"
@@ -19,11 +20,11 @@ if not os.path.exists(target_path):
 
 # 实例化检测器
 detector = YOLO(img_size=416,
-                model_path="./data_gen_and_train/ckpt_jyz/Epoch232-Total_Loss1.5223-Val_Loss3.6240.pth",
+                model_path="./data_gen_and_train/ckpt/Epoch250.pth",
                 cls_path="./data_gen_and_train/param_files/classes.name",
                 anchors_path="./data_gen_and_train/param_files/yolo_anchors.txt",
                 font_path="./data_gen_and_train/param_files/simhei.ttf",
-                confidence=0.6)
+                confidence=0.56)
 
 # 推理结果
 for img_name in tqdm(img_names):

@@ -259,7 +259,6 @@ class Generator:
                           [0.08304129276424002, 1.2840055684965987, 0.7742919291583074],
                           [0.04060578575492435, 0.7099565675278529, 0.8675518080241147]]
             for index, info in enumerate(self.img_infos):
-                print(info["path"], "----------------")
                 src_img = cv.imread(info["path"])
                 src_name = info["path"].split('/')[-1]
                 for i, param in enumerate(param_list):
