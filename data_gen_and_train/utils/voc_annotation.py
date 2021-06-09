@@ -4,7 +4,7 @@ from os import getcwd
 sets = [('2007', 'train')]
 
 wd = getcwd()
-classes = ["helmet"]
+classes = ["name"]
 
 
 def convert_annotation(xml_path, image_id, list_file):

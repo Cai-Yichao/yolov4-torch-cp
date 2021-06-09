@@ -70,13 +70,17 @@ class YOLO(object):
     # ---------------------------------------------------#
     def generate(self):
 
-        self.net = YoloBody(len(self.anchors[0]), len(self.class_names)).eval()
-
         # 加快模型训练的效率
         print('Loading weights into state dict...')
+        
+        # self.net = YoloBody(len(self.anchors[0]), len(self.class_names)).eval()
+        # device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        # state_dict = torch.load(self.model_path, map_location=device)
+        # self.net.load_state_dict(state_dict)
+
+
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        state_dict = torch.load(self.model_path, map_location=device)
-        self.net.load_state_dict(state_dict)
+        self.net = torch.load(self.model_path, map_location=device)
 
         if self.cuda:
             # os.environ["CUDA_VISIBLE_DEVICES"] = '1'
@@ -146,8 +150,6 @@ class YOLO(object):
         font = ImageFont.truetype(font=self.font_path, size=np.floor(3e-2 * np.shape(image)[1] + 0.5).astype('int32'))
         thickness = (np.shape(image)[0] + np.shape(image)[1]) // self.model_image_size[0]
         for i, c in enumerate(top_label):
-            if c == 1:
-                continue
             predicted_class = self.class_names[c]
             score = top_conf[i]
 

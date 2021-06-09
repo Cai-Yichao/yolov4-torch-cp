@@ -22,7 +22,7 @@ from tqdm import tqdm
 
 # global values
 imgs_path = "../input/test/images/"
-model_path = "../data_gen_and_train/ckpt/Epoch232-Total_Loss1.5223-Val_Loss3.6240.pth"
+model_path = "../data_gen_and_train/ckpt_no_mosaic/Epoch246-Total_Loss0.0925-Val_Loss0.2497.pth"
 cls_path = "../data_gen_and_train/param_files/classes.name"
 anchors_path = "../data_gen_and_train/param_files/yolo_anchors.txt"
 font_path = "../data_gen_and_train/param_files/simhei.ttf"
@@ -94,11 +94,11 @@ yolo = mAP_Yolo(
     cls_path =cls_path,
     anchors_path =anchors_path,
     font_path = font_path,
-    confidence = 0.4
+    confidence = 0.56
 )
 
 img_ids = []
-with open('./input/test/trainval.txt', 'r') as file_r:
+with open('../input/test/trainval.txt', 'r') as file_r:
     for line in file_r.readlines():
         img_path = line.strip('\n').split(' ')[0]
         img_id = img_path.split('/')[-1].strip('.jpg')

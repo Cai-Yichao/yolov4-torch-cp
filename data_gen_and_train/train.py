@@ -3,7 +3,7 @@
 # -------------------------------------#
 import os
 import time
-
+import mlflow
 import numpy as np
 import torch
 import torch.backends.cudnn as cudnn
@@ -57,6 +57,8 @@ class Trainer:
         self.class_names = get_classes(classes_path)
         self.anchors = get_anchors('./data_gen_and_train/param_files/yolo_anchors.txt')
         self.num_classes = len(self.class_names)
+        self.comare_list = [999999, 999999, 999999, 999999, 999999, 999999, 999999, 999999, 999999, 999999]
+        self.epoch_list = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
 
         self.ckpt_path = ckpt_path
         if not os.path.exists(self.ckpt_path):
@@ -153,11 +155,29 @@ class Trainer:
         print('Epoch:' + str(epoch + 1) + '/' + str(Epoch))
         print('Total Loss: %.4f || Val Loss: %.4f ' % (total_loss / (epoch_size + 1), val_loss / (epoch_size_val + 1)))
 
+        epoch_train_loss = float(total_loss) / float(epoch_size + 1)
+        epoch_value_loss = float(val_loss) / float(epoch_size_val + 1)
         print('Saving state, iter:', str(epoch + 1))
-        torch.save(self.model.state_dict(),
-                   self.ckpt_path + str('Epoch%d-Total_Loss%.4f-Val_Loss%.4f.pth'
-                                        % ((epoch + 1), total_loss / (epoch_size + 1),
-                                        val_loss / (epoch_size_val + 1))))
+
+        is_save, rm_epoch = self.is_save(epoch_value_loss, epoch+1)
+        if is_save:
+            torch.save(self.model,
+                    self.ckpt_path + str('Epoch%d.pth' % (epoch + 1)))
+            rm_path = self.ckpt_path + str('Epoch%d.pth' % rm_epoch)
+            if os.path.isfile(rm_path):
+                os.remove(rm_path)
+            
+        mlflow.log_metric("train_loss", epoch_train_loss, int(epoch + 1))
+        mlflow.log_metric("val_loss", epoch_value_loss, int(epoch + 1))
+
+    def is_save(self, value_loss, epoch):
+        if value_loss < max(self.comare_list):
+            idmax = self.comare_list.index(max(self.comare_list))
+            self.comare_list[idmax] = value_loss
+            rm_epoch = self.epoch_list[idmax]
+            self.epoch_list[idmax] = epoch
+            return True, rm_epoch
+        return False, -1
 
     def train(self):
         net = self.model.train()

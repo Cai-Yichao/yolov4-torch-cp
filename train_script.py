@@ -1,8 +1,11 @@
-# import os
+import os
+import mlflow
 # os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+mlflow.set_tracking_uri("http://192.168.64.22:5002")
+mlflow.set_experiment("train-trail")
 
 """
-(1)转换VOC数据格式，方便数据生成以及模型训练时读取加载数据:
+(1) Data preparing
 """
 from data_gen_and_train.utils.voc2yolo4 import *
 from data_gen_and_train.utils.voc_annotation import *
@@ -14,9 +17,8 @@ anno_file = "./data_gen_and_train/param_files/init_train.txt"
 voc2yolo(xmlfilepath, saveBasePath)
 gen_label_txt(xmlfilepath, saveBasePath, anno_file)
 
-print("Finished format transformation.")
+print("Finished training set transformation.")
 
-# 如果准备了评价数据
 saveBasePath = r"./input/test/"
 xmlfilepath = r'./input/test/labels/'
 if os.path.exists(xmlfilepath):
@@ -24,51 +26,69 @@ if os.path.exists(xmlfilepath):
     voc2yolo(xmlfilepath, saveBasePath)
     gen_label_txt(xmlfilepath, saveBasePath, anno_file)
 
-print("Finished format transformation.")
+print("Finished evaluating set transformation.")
 
 
 """
-(2)生成数据，扩充数据集
+(2) Data argumentation
 """
 from data_gen_and_train.gen_data.generator import Generator
 input_file = "./data_gen_and_train/param_files/init_train.txt"
 output_file = "./data_gen_and_train/param_files/expanded_train.txt"
-gen = Generator(input_file)
-gen.gen_hsv_tuning(output_file)          # 色域变换，扩充基础数量
-# gen.gen_fancyPCA_tuning(output_file)     # facny PCA
-# gen.gen_scale_transform(output_file)     # 尺度变换
-gen.gen_bright_transform(output_file)    # 亮度变换
-# gen.gen_flip_transform(output_file)      # 翻转位置变换
-gen.gen_rotate_transform(output_file)    # 旋转位置变换
 
-print("Finished data_generation.")
+print("Generating data...")
+gen = Generator(input_file)
+gen.gen_hsv_tuning(output_file)             
+# gen.gen_fancyPCA_tuning(output_file)     
+# gen.gen_scale_transform(output_file)    
+# gen.gen_bright_transform(output_file)   
+# gen.gen_flip_transform(output_file)        
+gen.gen_rotate_transform(output_file)    
+
+print("Finished data argumentaion.")
 
 
 """
-(3) 模型训练
+(3) Training
 """
 from data_gen_and_train.train import Trainer
 
 if __name__ == "__main__":
-    """
-    训练检测模型
-    """
-    model = Trainer(
-        annotation_path="./data_gen_and_train/param_files/expanded_train.txt",
-        classes_path="./data_gen_and_train/param_files/classes.name",
-        ckpt_path="./data_gen_and_train/ckpt/",
-        freeze_bn_size=32,          
-        freeze_epoch=50,            # 冻结权重epoch
-        freeze_learning_rate=1e-3,          # 冻结时初始学习率
-        bn_size=8,  
-        total_epoch=250,            # 总的训练epoch
-        learning_rate=5e-4,         # 解冻后初始学习率
-        cosine_lr=False,    # 是否使用余弦学习率，默认False
-        mosaic=True,      # 是否使用mosaic增强，默认True
-        smooth_label=0,       # 是否使用标签平滑，默认0
-        input_size=416          # 输入尺寸，默认416
-    )
 
-    model.train()
-    print("Finished training model .")
+    with mlflow.start_run():
+        
+        # log parameters into mlflow
+        mlflow.log_param("project_root", "192.168.64.22:/data1/yolov4-train/")
+        mlflow.log_param("dataset_path", "192.168.64.22:/data5/dataset/")
+        mlflow.log_param("ckpt_path", "./data_gen_and_train/ckpt/")
+        mlflow.log_param("freeze_batch_size", "8")
+        mlflow.log_param("freeze_epoch", "50")
+        mlflow.log_param("freeze_learning_rate", "1e-3")
+        mlflow.log_param("batch_size", "4")
+        mlflow.log_param("total_epoch","250")
+        mlflow.log_param("learning_rate", "2e-4")
+        mlflow.log_param("tricks", "mosaic, no cosine_lr, no smooth_label")
+        mlflow.log_param("input_size", "416")
+        
+
+        model = Trainer(
+            annotation_path="./data_gen_and_train/param_files/expanded_train.txt",
+            classes_path="./data_gen_and_train/param_files/classes.name",
+            ckpt_path="./data_gen_and_train/ckpt/",
+            freeze_bn_size=8,          
+            freeze_epoch=50,            
+            freeze_learning_rate=1e-3,         
+            bn_size=4,  
+            total_epoch=250,           
+            learning_rate=2e-4,        
+            cosine_lr=False,   
+            mosaic=True,     
+            smooth_label=0,       
+            input_size=416          
+        )
+
+        model.train()
+        mlflow.log_artifacts("./data_gen_and_train/ckpt/")
+
+        print("Finished training model .")
 
