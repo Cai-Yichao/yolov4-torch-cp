@@ -161,7 +161,7 @@ class Trainer:
 
         is_save, rm_epoch = self.is_save(epoch_value_loss, epoch+1)
         if is_save:
-            torch.save(self.model,
+            torch.save(self.model.state_dict(),
                     self.ckpt_path + str('Epoch%d.pth' % (epoch + 1)))
             rm_path = self.ckpt_path + str('Epoch%d.pth' % rm_epoch)
             if os.path.isfile(rm_path):

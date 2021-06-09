@@ -1,6 +1,5 @@
 import os
 import mlflow
-# os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 mlflow.set_tracking_uri("http://192.168.64.22:5002")
 mlflow.set_experiment("train-trail")
 
