@@ -66,7 +66,7 @@ If you don't want to do data argumentation，juest simply annote all codes of se
 Normally, **bn_size** should to smaller than **freeze_bn_size** to avoid OOM. Before training, you can set **freeze_epoch = 0** to figure out a felicitous **bn_size**.
 
 ____
-## 3 Use mlflow tracking your training process
+## 3 Using mlflow tracking your training process
 
 To record parameters like learning rate, bn_size and dataset path, use:
 ``` python
@@ -105,7 +105,7 @@ python 3_get_map.py
 After which，results can be find in **./validation/results**.
 
 ____
-## 5 Predict
+## 5 Predicting
 （1）Modify the path of images to be infered **on line 10 in predict.py**.
 
 （2）Change variants below, in **predict.py, line 22**:
